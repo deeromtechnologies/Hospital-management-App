@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	
+
+	<h3><a href="{{url_for('services')}}">Add blog</a></h3>
+	<table border="3">
+		<thead>
+			<tr>
+				
+				<th>bid</th>
+				<th>id</th>
+				<th>username</th>
+				<th>date_created</th>
+				<th>about</th>
+				<th>description</th>
+				
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in result %}
+				<tr>
+					
+					<td>{{user.bid}}</td>
+					<td>{{user.id}}</td>
+					<td>{{user.username}}</td>
+					<td>{{user.date_created}}</td>
+					<td>{{user.about}}</td>
+					<td>{{user.description}}</td>
+					
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</body>
+</html>
