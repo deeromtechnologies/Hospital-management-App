@@ -187,6 +187,18 @@ def update(bid):
         return f"User with id = {bid} Does not exist"
     return render_template('update.html', emp = emp)
 
+@app.route('/services/<int:bid>/delete', methods=['GET','POST'])
+def delete(bid):
+    sample = blog.query.filter_by(bid=bid).first()
+    if request.method == 'POST':
+        if sample:
+            db.session.delete(sample)
+            db.session.commit()
+            return redirect(url_for('bdes'))
+        abort(404)
+ 
+    return render_template('delete.html', sample=sample)
+
 
 @app.route('/images')
 def images():
