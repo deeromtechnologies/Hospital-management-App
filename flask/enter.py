@@ -2,11 +2,26 @@ from flask import Flask,render_template,request,url_for,session,redirect
 from flask_sqlalchemy import SQLAlchemy
 import bpdb
 from datetime import date
+from flask_wtf import FlaskForm
+from wtforms import StringField
+from wtforms.validators import DataRequired
+from wtforms import Form, BooleanField, StringField, IntegerField, PasswordField, validators
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///HMS.sqlite3'
 db = SQLAlchemy(app)
 app.secret_key="43221"
+
+class RegistrationForm(Form):
+    id =  IntegerField('id')
+    firstname = StringField('firstname', [validators.Length(min=4, max=25)])
+    lastname = StringField('lastname', [validators.Length(min=4, max=25)])
+    username = StringField('username', [validators.Length(min=4, max=25)])
+    email = StringField('email', [validators.Length(min=6, max=35)])
+    password = PasswordField('password', [validators.DataRequired(),
+        validators.EqualTo('confirm', message='passwords must match')])
+    confirmpassword = PasswordField('confirmpassword')
+    
 
 class register(db.Model):
 
@@ -92,15 +107,18 @@ def signin():
 
 @app.route('/signup',methods=["POST","GET"])
 def signup():
+
+    form=RegistrationForm(request.form)
     #bpdb.set_trace()
     if request.method =="POST":
         #bpdb.set_trace()
-        reg = register(id=request.form['id'],firstname=request.form['firstname'],lastname=request.form['lastname'],username=request.form['username'],email= request.form['email'],password=request.form['password'],confirmpassword=request.form['password'])
-        db.session.add(reg)
+        user= register(id=form.id.data, firstname=form.firstname.data, lastname=form.lastname.data, username=form.username.data, email=form.email.data, password=form.password.data, confirmpassword=form.confirmpassword.data)
+        db.session.add(user)
         db.session.commit()
-        return redirect(url_for('users'))
+        result=register.query.all()
+        return redirect(url_for('users', result=result))
     else:   
-        return render_template('signup.html') 
+        return render_template('signup.html',form=form) 
 
 @app.route('/about')
 def about():
@@ -109,7 +127,7 @@ def about():
 @app.route('/services',methods=["POST","GET"])
 def services():
     #bpdb.set_trace()
-    if request.method =="POST":
+    if request.method =="POST" and form.validate_on_submit() :
         #bpdb.set_trace()
         obj= blog(bid=request.form['bid'],id=request.form['id'],username=request.form['username'],date_created=date,about=request.form['about'],description=request.form['description'])
         db.session.add(obj)
@@ -117,6 +135,19 @@ def services():
         return redirect(url_for('bdes'))
     else:
         return render_template('/services.html') 
+
+@app.route('/edit',methods=["POST","GET"])
+def edit():
+    #bpdb.set_trace()
+    if request.method =="POST":
+        #bpdb.set_trace()
+        obj= blog(bid=request.form['bid'],id=request.form['id'],username=request.form['username'],date_created=date,about=request.form['about'],description=request.form['description'])
+        db.session.add(obj)
+        db.session.commit()
+        return redirect(url_for('bdes'))
+    else:
+        return render_template('/services.html')
+
 
 @app.route('/images')
 def images():
