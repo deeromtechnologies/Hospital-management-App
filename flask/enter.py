@@ -6,8 +6,24 @@ from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired
 from wtforms import Form, BooleanField, StringField, IntegerField, PasswordField, validators
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
+
+app.config['DEBUG'] =True
+app.config['TESTING'] = False
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'aiswaryababuraj61@gmail.com'
+app.config['MAIL_PASSWORD'] = '****'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_MAX_EMAILS'] = None
+app.config['MAIL_ASCII_ATTACHMENTS'] = False
+
+
+mail = Mail(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///HMS.sqlite3'
 db = SQLAlchemy(app)
 app.secret_key="43221"
@@ -21,6 +37,14 @@ class RegistrationForm(Form):
     password = PasswordField('password', [validators.DataRequired(),
         validators.EqualTo('confirm', message='passwords must match')])
     confirmpassword = PasswordField('confirmpassword')
+
+
+class MyForm(Form):
+    bid = IntegerField('bid',validators=[DataRequired()])
+    id =  IntegerField('id', validators=[DataRequired()]) 
+    username = StringField('username', [validators.Length(min=4, max=25)])
+    about = StringField('about', [validators.Length(min=4, max=25)]) 
+    description = StringField('description', [validators.Length(min=4, max=25)]) 
     
 
 class register(db.Model):
@@ -48,7 +72,6 @@ class blog(db.Model):
     bid = db.Column(db.String(120), primary_key=True)
     id = db.Column(db.String(120), db.ForeignKey('register'))
     username = db.Column(db.String(100), unique=False, nullable=False)
-    #bpdb.set_trace()
     date_created = db.Column(db.DateTime, nullable=False)
     about = db.Column(db.String(120), unique=False, nullable=False)
     description = db.Column(db.String(800), unique=False, nullable=False)
@@ -111,11 +134,20 @@ def signup():
     form=RegistrationForm(request.form)
     #bpdb.set_trace()
     if request.method =="POST":
-        #bpdb.set_trace()
+        
+        msg = Message("successfully registered",
+
+                sender="aiswaryababuraj61@gmail.com",
+
+                recipients=["baburajaiswarya862@gmail.com"])
+
+        msg.body = "Thank you for registering with us"
+        mail.send(msg)
         user= register(id=form.id.data, firstname=form.firstname.data, lastname=form.lastname.data, username=form.username.data, email=form.email.data, password=form.password.data, confirmpassword=form.confirmpassword.data)
         db.session.add(user)
         db.session.commit()
         result=register.query.all()
+        #bpdb.set_trace()
         return redirect(url_for('users', result=result))
     else:   
         return render_template('signup.html',form=form) 
@@ -126,27 +158,34 @@ def about():
 
 @app.route('/services',methods=["POST","GET"])
 def services():
-    #bpdb.set_trace()
-    if request.method =="POST" and form.validate_on_submit() :
-        #bpdb.set_trace()
-        obj= blog(bid=request.form['bid'],id=request.form['id'],username=request.form['username'],date_created=date,about=request.form['about'],description=request.form['description'])
-        db.session.add(obj)
-        db.session.commit()
-        return redirect(url_for('bdes'))
-    else:
-        return render_template('/services.html') 
-
-@app.route('/edit',methods=["POST","GET"])
-def edit():
-    #bpdb.set_trace()
+    form = MyForm(request.form)
     if request.method =="POST":
-        #bpdb.set_trace()
-        obj= blog(bid=request.form['bid'],id=request.form['id'],username=request.form['username'],date_created=date,about=request.form['about'],description=request.form['description'])
+        obj= blog(bid=form.bid.data,id=form.id.data,username=form.username.data,date_created=date,about=form.about.data,description=form.description.data)
         db.session.add(obj)
         db.session.commit()
+        #result=blog.query.all()
         return redirect(url_for('bdes'))
     else:
-        return render_template('/services.html')
+        return render_template('/services.html',form=form) 
+
+@app.route('/services/<int:bid>/update',methods=["GET","POST"])
+def update(bid):
+    form = MyForm(request.form)
+    emp=blog.query.filter_by(bid=bid).first()
+    if request.method=='POST':
+        if emp:
+            db.session.delete(emp)
+            db.session.commit()
+            id=form.id.data
+            username=form.username.data
+            about=form.about.data
+            description=form.description.data
+            emp=blog(bid=bid,id=id,username=username,date_created=date,about=about,description=description)
+            db.session.add(emp)
+            db.session.commit()
+            return redirect(url_for('bdes'))
+        return f"User with id = {bid} Does not exist"
+    return render_template('update.html', emp = emp)
 
 
 @app.route('/images')

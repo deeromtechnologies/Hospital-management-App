@@ -153,28 +153,34 @@
 <div class="contact-form">
  <div class="container">
   <form action="#" method="POST">
+    {{form.csrf_token}}
    <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-12">
       <h1>ADD NEW BLOG</h1> 
     </div>
     <div class="col-lg-8 col-md-8 col-sm-12 right">
       <div class="form-group">
-         <input type="text" class="form-control form-control-lg" placeholder="Enter Your bid" name="bid">
-       </div>
+        <label for="id"><b>{{form.bid.label}}</b></label>
+        {{form.bid()}}
+      </div>
       <div class="form-group">
-         <input type="text" class="form-control form-control-lg" placeholder="Enter Your id" name="id">
-       </div>
+        <label for="id"><b>{{form.id.label}}</b></label>
+        {{form.id()}}
+      </div>
        <div class="form-group">
-         <input type="username" class="form-control form-control-lg" placeholder="Create Your Username" name="username">
-       </div>
+        <label for="id"><b>{{form.username.label}}</b></label>
+        {{form.id()}}
+      </div>
        <div class="form-group">
-         <input type="text" class="form-control form-control-lg" placeholder="Title" name="about">
-       </div>
+        <label for="id"><b>{{form.about.label}}</b></label>
+        {{form.about()}}
+      </div>
        <div class="form-group">
-         <input type="text" class="form-control form-control-lg" placeholder="Description" name="description">
-       </div>
+        <label for="id"><b>{{form.description.label}}</b></label>
+        {{form.description()}}
+      </div>
        
-       <input type="submit" class="btn btn-secondary btn-block" value="SUBMIT" name="">
+       <input type="submit" value="SUBMIT">
     </div>
    </div>
   </form>
