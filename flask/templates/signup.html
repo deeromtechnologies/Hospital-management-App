@@ -60,33 +60,41 @@
 <div class="contact-form">
  <div class="container">
   <form action="#" method="POST">
+    {{form.csrf_token}}
    <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-12">
       <h1>SIGN UP</h1> 
     </div>
     <div class="col-lg-8 col-md-8 col-sm-12 right">
       <div class="form-group">
-         <input type="text" class="form-control form-control-lg" placeholder="Enter Your id" name="id">
+        <label for="id"><b>{{form.id.label}}</b></label>
+        {{form.id()}}
+      </div>
+      <div class="form-group">
+          <label for="firstname"><b>{{form.firstname.label}}</b></label>
+          {{form.firstname()}} 
+      </div>
+      <div class="form-group">
+         <label for="lastname"><b>{{form.lastname.label}}</b></label>
+        {{form.lastname()}}
        </div>
        <div class="form-group">
-         <input type="text" class="form-control form-control-lg" placeholder="Enter Your First Name" name="firstname">
+         <label for="username"><b>{{form.username.label}}</b></label>
+        {{form.username()}}
        </div>
        <div class="form-group">
-         <input type="text" class="form-control form-control-lg" placeholder="Enter Your Last Name" name="lastname">
+         <label for="email"><b>{{form.email.label}}</b></label>
+        {{form.email()}}
        </div>
        <div class="form-group">
-         <input type="email" class="form-control form-control-lg" placeholder="Enter Your Email" name="email">
+         <label for="password"><b>{{form.password.label}}</b></label>
+        {{form.password()}}
        </div>
        <div class="form-group">
-         <input type="username" class="form-control form-control-lg" placeholder="Create Your Username" name="username">
+         <label for="confirmpassword"><b>{{form.confirmpassword.label}}</b></label>
+        {{form.confirmpassword()}}
        </div>
-       <div class="form-group">
-         <input type="password" class="form-control form-control-lg" placeholder="Create Your Password" name="password">
-       </div>
-       <div class="form-group">
-         <input type="password" class="form-control form-control-lg" placeholder="Confirm Your Password" name="password">
-       </div>
-       <input type="submit" class="btn btn-secondary btn-block" value="SUBMIT" name="">
+       <input type="submit" value="submit">
     </div>
    </div>
   </form>
