@@ -176,16 +176,20 @@ def update(bid):
         if emp:
             db.session.delete(emp)
             db.session.commit()
+            bid=form.bid.data
             id=form.id.data
             username=form.username.data
+            date_created=date
             about=form.about.data
             description=form.description.data
             emp=blog(bid=bid,id=id,username=username,date_created=date,about=about,description=description)
+            
             db.session.add(emp)
             db.session.commit()
-            return redirect(url_for('bdes'))
+            return redirect(url_for('bdes', bid=bid))
         return f"User with id = {bid} Does not exist"
-    return render_template('update.html', emp = emp)
+    user = blog.query.filter_by(bid=bid).first()
+    return render_template('update.html', emp=user)
 
 @app.route('/services/<int:bid>/delete', methods=['GET','POST'])
 def delete(bid):

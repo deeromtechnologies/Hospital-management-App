@@ -10,8 +10,10 @@
       
       <h1>Edit</h1>
       <form action="update" method="post">
+      	 <p>bid<input type = "integer" name = "bid" value="{{emp.bid}}"/></p>
       	 <p>id<input type = "integer" name = "id" value="{{emp.id}}"/></p>
          <p>username<input type = "text" name = "username" value="{{emp.username}}"/></p>
+         <p>date<input type = "integer" name = "date_created" value="{{emp.date}}"/></p>
          <p>about <input type = "text" name = "about" value="{{emp.about}}"/></p>
          <p>description<input type = "text" name = "description" value="{{emp.description}}"/></p>
         <p><input type = "submit" value = "Submit" /></p>
