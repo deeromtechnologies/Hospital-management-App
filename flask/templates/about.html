@@ -6,11 +6,64 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link href="{{ url_for('static',filename='main.css')}}" rel="stylesheet">
-    
+    <style>
+        body  
+        {  
+        margin: 0;  
+        padding: 0;  
+        background-color:#6abadeba;  
+        font-family: 'Arial';  
+        }
+
+        .navbar{
+        background-image: url("logo.jpg"); 
+        background-repeat: no-repeat;
+        background-size: cover;
+        } 
+
+        .img{
+        background-image: url("3.jpg");
+        background-size: cover;
+        background-position: center;
+        min-height: 850px;
+        }
+
+        .about{
+ margin: 4em 0;
+ padding: 1em;
+ position: relative;
+}
+.about h1{
+ color:black;
+ margin: 2em;
+}
+.about img{
+ height: 100%;
+    width: 100%;
+    border-radius: 50%
+}
+.about span{
+ display: block;
+ color: #888;
+ position: absolute;
+ left: 115px;
+}
+.about .desc{
+ padding: 2em;
+ border-left:4px solid #10828C;
+}
+.about .desc h3{
+ color: #10828C;
+}
+.about .desc p{
+ line-height:2;
+ color:#888;
+}
+    </style>
+
   </head> 
 
-  <body class="header" style="background-image: url('static/3.jpg')";>
+  <body class="header" >
     <div class="overlay"></div>
     <div class="row">
       <nav class="navbar navbar-expand-lg navigation-light ">

@@ -6,11 +6,34 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+   
+   <style>
+        body  
+        {  
+        margin: 0;  
+        padding: 0;  
+        background-color:#6abadeba;  
+        font-family: 'Arial';  
+        }
+
+        .navbar{
+        background-image: url("logo.jpg"); 
+        background-repeat: no-repeat;
+        background-size: cover;
+        } 
+
+        .img{
+        background-image: url("3.jpg");
+        background-size: cover;
+        background-position: center;
+        min-height: 850px;
+        }
+      
+    </style>
 
   </head> 
 
-  <body class="header" style="background-image: url('static/3.jpg')";>
+  <body class="header">
    <div class="overlay"> 
    <nav class="navbar navbar-expand-lg navigation-light ">
          <div class="container-fluid">
@@ -58,28 +81,33 @@
 <!-- Signin form -->
 <div class="contact-form">
  <div class="container">
-  <form action="{{ url_for('signin') }}" method="post">
+  <form>
    <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-12">
       <h1>SIGN IN</h1> 
     </div>
     <div class="col-lg-8 col-md-8 col-sm-12 right">
        <div class="form-group">
-         <input type="Username" class="form-control form-control-lg" placeholder="Enter Your Username" name="username">
+         <input type="email"  placeholder="Email" name="email">
        </div>
        <div class="form-group">
-         <input type="password" class="form-control form-control-lg" placeholder="Enter Your Password" name="password">
+         <input type="password"  placeholder="Password" name="">
        </div>
-       <input type="submit" class="btn btn-secondary btn-block" value="SUBMIT" name="">
+       <div class="field">
+                <label class="checkbox">
+                    <input type="checkbox">
+                    Remember me
+                </label>
+            </div>
+       <input type="submit"  value="SIGN IN" >
     </div>
    </div>
   </form>
  </div>
 </div>
 
-
    	</div>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <section id="footer">
     <div class="container">
       <div class="row ">

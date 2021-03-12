@@ -118,12 +118,9 @@ def index():
 
 @app.route('/signin',methods=["POST","GET"])
 def signin():
+    
     if request.method =="POST":
-        username=request.form["username"]
-        # bpdb.set_trace()
-        session["username"]=username
-        password=request.form["password"]
-        session["password"]=password
+
         return redirect(url_for("index"))
     else:
         return render_template('signin.html')

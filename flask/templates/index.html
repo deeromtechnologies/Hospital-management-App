@@ -1,17 +1,72 @@
 <html>
 
 	<head>
+    <title>healthcarehospital@gmail.com</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    
 
-		<title>healthcarehospital@gmail.com</title>
+		<style>
+
+        body  
+        {  
+        margin: 0;  
+        padding: 0;  
+        background-color:#6abadeba;  
+        font-family: 'Arial';  
+        }
+
+        .header{
+        background-image: url("3.jpg");
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+        }
+
+        .overlay{
+        position: absolute;
+        min-height: 100%;
+        min-width: 100%;
+        left: 0;
+        top: 0;
+        background: rgba(244, 244, 244, 0.79);
+        }
+        
+        .navbar{
+        background-image: url("logo.jpg"); 
+        background-repeat: no-repeat;
+        background-size: cover;
+        } 
+
+        .img{
+        background-image: url("3.jpg");
+        background-size: cover;
+        background-position: center;
+        min-height: 850px;
+        }
+
+        .description{
+        position: absolute;
+        top: 30%;
+        margin: auto;
+        padding: 2em;
+        }
+
+        .description h1{
+        color:blue ;
+        }
+
+        .description p{
+        color:#666;
+        font-size: 20px;
+        width: 50%;
+        line-height: 1.5;
+        }
+    </style>
 
 	</head>	
 
-	<body class="header" style="background-image: url('static/3.jpg')";>
+	<body class="header">
  
   	<div class="overlay"></div>
   	<div class="container">
