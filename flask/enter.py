@@ -174,7 +174,7 @@ def signin():
         if not user or not (user.password==password):
         #if login is not None:
             return "check login credential"
-        return redirect(url_for("services",email=email))
+        return render_template("profile.html",email=email)
 
 
         #login_user(user)
