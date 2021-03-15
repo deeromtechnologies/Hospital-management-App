@@ -24,7 +24,8 @@
 
         .img{
         background-image: url("3.jpg");
-        background-size: cover;
+        backgrouls
+        nd-size: cover;
         background-position: center;
         min-height: 850px;
         }
@@ -81,17 +82,20 @@
 <!-- Signin form -->
 <div class="contact-form">
  <div class="container">
-  <form>
+  <form action="#" method="POST">
+    {{form.csrf_token}}
    <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-12">
       <h1>SIGN IN</h1> 
     </div>
     <div class="col-lg-8 col-md-8 col-sm-12 right">
-       <div class="form-group">
-         <input type="email"  placeholder="Email" name="email">
+      <div class="form-group">
+         <label for="email"><b>{{form.email.label}}</b></label>
+        {{form.email()}}
        </div>
        <div class="form-group">
-         <input type="password"  placeholder="Password" name="">
+         <label for="password"><b>{{form.password.label}}</b></label>
+        {{form.password()}}
        </div>
        <div class="field">
                 <label class="checkbox">

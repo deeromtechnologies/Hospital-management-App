@@ -8,6 +8,8 @@ from wtforms.validators import DataRequired
 from wtforms import Form, BooleanField, StringField, IntegerField, PasswordField, validators
 from flask_mail import Mail, Message
 from flask_login import LoginManager
+from flask_login import UserMixin
+from flask_login import login_required, current_user
 
 
 app = Flask(__name__)
@@ -38,7 +40,7 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(id):
-    return register.query.get(int(id))
+    return register.query.filter_by(id=id).first()
 
 class RegistrationForm(Form):
     id =  IntegerField('id')
@@ -59,7 +61,7 @@ class MyForm(Form):
     description = StringField('description', [validators.Length(min=4, max=25)]) 
     
 
-class register(db.Model):
+class register(UserMixin,db.Model):
 
     id = db.Column(db.String(120), primary_key=True)
     firstname = db.Column(db.String(120), unique=False, nullable=False)
@@ -79,7 +81,7 @@ def __init__(self, id, firstname, lastname, username, email, password, confirmpa
     self.password = password
     self.confirmpassword = confirmpassword
 
-class blog(db.Model):
+class blog(UserMixin,db.Model):
 
     bid = db.Column(db.String(120), primary_key=True)
     id = db.Column(db.String(120), db.ForeignKey('register'))
@@ -128,32 +130,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/signin',methods=["POST", "GET"])
-def signin():
-
-    if request.method == "POST":
-        user=request.form["email"]
-        
-        session["user"]=user
-
-        user1=request.form["Password"]
-        
-        
-        user=register.query.filter_by(email=user).first()
-    
-        
-        return redirect(url_for("signup",user=user))
-
-        if not user or not check_password_hash(user.password,user1):
-        #if login is not None:
-            flash("check login credential")
-            return(redirect(url_for("signin")))
-
-
-        login_user(user)
-        flash("you have been logged in")
-        return redirect(url_for("index"))
-
 @app.route('/signup',methods=["POST","GET"])
 def signup():
 
@@ -176,7 +152,50 @@ def signup():
         #bpdb.set_trace()
         return redirect(url_for('signin', result=result))
     else:   
-        return render_template('signup.html',form=form) 
+        return render_template('signup.html',form=form)
+
+
+@app.route('/signin',methods=["POST", "GET"])
+def signin():
+    form=RegistrationForm(request.form)
+    if request.method == "POST":
+        email=form.email.data
+        password=form.password.data
+        
+        session["email"]=email
+
+        #user1=request.form["Password"]
+        
+        
+        user=register.query.filter_by(email=email).first()
+    
+        
+        #return redirect(url_for("addblog",user=user))
+        if not user or not (user.password==password):
+        #if login is not None:
+            return "check login credential"
+        return redirect(url_for("services",email=email))
+
+
+        #login_user(user)
+        #flash("you have been logged in")
+        #return redirect(url_for("images"))
+    return render_template("signin.html",form=form)
+
+#bpdb.set_trace()
+@app.route('/profile')
+@login_required
+
+def profile():
+    return render_template('profile.html', name=current_user.name, mail=current_user.email)
+
+@app.route('/logout')
+def logout():
+    
+    # bpdb.set_trace()
+    session.pop('email', None)
+    return redirect(url_for('signin'))
+
 
 @app.route('/about')
 def about():
@@ -242,12 +261,7 @@ def doctors():
 def contact():
     return render_template('/contact.html') 
 
-@app.route('/logout')
-def logout():
-    
-    # bpdb.set_trace()
-    session.pop('username', None)
-    return redirect(url_for('signin')) 
+ 
 
 
 if __name__ == '__main__':
