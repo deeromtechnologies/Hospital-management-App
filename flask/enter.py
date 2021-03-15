@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,url_for,session,redirect
+from flask import Flask,render_template,request,url_for,session,redirect,flash
 from flask_sqlalchemy import SQLAlchemy
 import bpdb
 from datetime import date
@@ -7,15 +7,18 @@ from wtforms import StringField
 from wtforms.validators import DataRequired
 from wtforms import Form, BooleanField, StringField, IntegerField, PasswordField, validators
 from flask_mail import Mail, Message
+from flask_login import LoginManager
+
 
 app = Flask(__name__)
+
 
 app.config['DEBUG'] =True
 app.config['TESTING'] = False
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'aiswaryababuraj61@gmail.com'
-app.config['MAIL_PASSWORD'] = '****'
+app.config['MAIL_USERNAME'] = 'baburajaiswarya862@gmail.com'
+app.config['MAIL_PASSWORD'] = 'baburajaiswarya321'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_MAX_EMAILS'] = None
@@ -24,9 +27,18 @@ app.config['MAIL_ASCII_ATTACHMENTS'] = False
 
 mail = Mail(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///HMS.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///HmS.sqlite3'
 db = SQLAlchemy(app)
 app.secret_key="43221"
+
+login_manager = LoginManager()
+login_manager.login_view = 'signin'
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(id):
+    return register.query.get(int(id))
 
 class RegistrationForm(Form):
     id =  IntegerField('id')
@@ -116,14 +128,31 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/signin',methods=["POST","GET"])
+@app.route('/signin',methods=["POST", "GET"])
 def signin():
-    
-    if request.method =="POST":
 
+    if request.method == "POST":
+        user=request.form["email"]
+        
+        session["user"]=user
+
+        user1=request.form["Password"]
+        
+        
+        user=register.query.filter_by(email=user).first()
+    
+        
+        return redirect(url_for("signup",user=user))
+
+        if not user or not check_password_hash(user.password,user1):
+        #if login is not None:
+            flash("check login credential")
+            return(redirect(url_for("signin")))
+
+
+        login_user(user)
+        flash("you have been logged in")
         return redirect(url_for("index"))
-    else:
-        return render_template('signin.html')
 
 @app.route('/signup',methods=["POST","GET"])
 def signup():
@@ -134,9 +163,9 @@ def signup():
         
         msg = Message("successfully registered",
 
-                sender="aiswaryababuraj61@gmail.com",
+                sender="baburajaiswarya862@gmail.com",
 
-                recipients=["baburajaiswarya862@gmail.com"])
+                recipients=["aiswaryababuraj61@gmail.com"])
 
         msg.body = "Thank you for registering with us"
         mail.send(msg)
@@ -145,7 +174,7 @@ def signup():
         db.session.commit()
         result=register.query.all()
         #bpdb.set_trace()
-        return redirect(url_for('users', result=result))
+        return redirect(url_for('signin', result=result))
     else:   
         return render_template('signup.html',form=form) 
 
